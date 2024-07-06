@@ -1,43 +1,52 @@
+// import flatpickr from "flatpickr";
+// import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
-const formEl = document.querySelector('.form');
-formEl.addEventListener('submit', onFormSubmit);
-
-function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (shouldResolve) {
-        resolve({ position, delay });
-      } else {
-        // Reject
-        reject({ position, delay });
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.form');
+    
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const delayInput = document.querySelector('input[name="delay"]');
+      const stateInputs = document.querySelectorAll('input[name="state"]');
+      
+      const delay = parseInt(delayInput.value); // Зчитуємо значення затримки і перетворюємо на число
+      
+      let chosenState;
+      for (const stateInput of stateInputs) {
+        if (stateInput.checked) {
+          chosenState = stateInput.value;
+          break;
+        }
       }
-    }, delay);
-  });
-}
-
-function onFormSubmit(evt) {
-  evt.preventDefault();
-  let {
-    elements: { delay, step, amount },
-  } = evt.currentTarget;
-  let elemDelay = Number(delay.value);
-  let elemStep = Number(step.value);
-  let elemAmount = Number(amount.value);
-  if (elemDelay < 0 || elemStep < 0 || elemAmount <= 0) {
-    alert('Date must be positive');
-    return;
-  }
-  for (let position = 1; position <= elemAmount; position++) {
-    createPromise(position, elemDelay)
-      .then(({ position, delay }) => {
-        Notiflix.Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
-      })
-      .catch(({ position, delay }) => {
-        Notiflix.Notify.failure(`Rejected promise ${position} in ${delay}ms`);
+      
+      // Створюємо новий проміс
+      const promise = new Promise((resolve, reject) => {
+        if (chosenState === 'fulfilled') {
+          setTimeout(() => {
+            resolve(delay); // Виконуємо проміс з затримкою
+          }, delay);
+        } else if (chosenState === 'rejected') {
+          setTimeout(() => {
+            reject(delay); // Відхиляємо проміс з затримкою
+          }, delay);
+        }
       });
-    elemDelay += elemStep;
-  }
-}
+      
+      // Обробляємо результат промісу
+      promise.then((delay) => {
+        console.log(`Fulfilled promise in ${delay}ms.`);
+      }).catch((delay) => {
+        console.log(`Rejected promise in ${delay}ms.`);
+      });
+      
+      // Очистимо поля форми
+      delayInput.value = '';
+      for (const stateInput of stateInputs) {
+        stateInput.checked = false;
+      }
+    });
+  });
+  

@@ -1,0 +1,41 @@
+@import flatpickr from "flatpickr";
+@import "flatpickr/dist/flatpickr.min.css";
+@import iziToast from "izitoast";
+@import "izitoast/dist/css/iziToast.min.css";
+
+
+input#datetime-picker {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.timer {
+  display: flex;
+  gap: 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.value {
+  font-size: 30px;
+}
+
+.label {
+  font-size: 1em;
+}
