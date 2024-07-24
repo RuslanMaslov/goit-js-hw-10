@@ -1,5 +1,3 @@
-// import flatpickr from "flatpickr";
-// import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
@@ -35,13 +33,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
       
-      // Обробляємо результат промісу
-      promise.then((delay) => {
-        console.log(`Fulfilled promise in ${delay}ms.`);
-      }).catch((delay) => {
-        console.log(`Rejected promise in ${delay}ms.`);
-      });
-      
+     promise.then((delay) => {
+    iziToast.success({
+        title: 'Fulfilled',
+      message: `promise in ${delay}ms.`, 
+        position: 'topRight'
+    });
+}).catch((delay) => {
+    iziToast.error({
+        title: 'Rejected',
+        message: `promise in ${delay}ms`,
+        position: 'topRight'
+    });
+});
       // Очистимо поля форми
       delayInput.value = '';
       for (const stateInput of stateInputs) {
@@ -49,4 +53,3 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
-  
